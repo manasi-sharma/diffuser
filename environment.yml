@@ -1,4 +1,4 @@
-name: diffuser
+name: diffuser_plain
 channels:
 - defaults
 - conda-forge
