@@ -64,6 +64,7 @@ class Trainer(object):
         self.sample_freq = sample_freq
         self.save_freq = save_freq
         self.label_freq = label_freq
+        import pdb;pdb.set_trace()
         self.save_parallel = save_parallel
 
         self.batch_size = train_batch_size
@@ -118,6 +119,7 @@ class Trainer(object):
                 self.step_ema()
 
             if self.step % self.save_freq == 0:
+                import pdb;pdb.set_trace()
                 label = self.step // self.label_freq * self.label_freq
                 self.save(label)
 
