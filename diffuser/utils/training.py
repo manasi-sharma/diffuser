@@ -64,7 +64,6 @@ class Trainer(object):
         self.sample_freq = sample_freq
         self.save_freq = save_freq
         self.label_freq = label_freq
-        import pdb;pdb.set_trace()
         self.save_parallel = save_parallel
 
         self.batch_size = train_batch_size

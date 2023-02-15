@@ -10,7 +10,6 @@ class Parser(utils.Parser):
     config: str = 'config.locomotion'
 
 args = Parser().parse_args('diffusion')
-import pdb;pdb.set_trace()
 
 #-----------------------------------------------------------------------------#
 #---------------------------------- dataset ----------------------------------#
@@ -72,7 +71,6 @@ diffusion_config = utils.Config(
     device=args.device,
 )
 
-import pdb;pdb.set_trace()
 trainer_config = utils.Config(
     utils.Trainer,
     savepath=(args.savepath, 'trainer_config.pkl'),
