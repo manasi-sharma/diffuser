@@ -10,7 +10,7 @@ class Parser(utils.Parser):
     config: str = 'config.locomotion'
 
 args = Parser().parse_args('diffusion')
-
+import pdb;pdb.set_trace()
 
 #-----------------------------------------------------------------------------#
 #---------------------------------- dataset ----------------------------------#
