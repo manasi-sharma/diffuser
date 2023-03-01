@@ -160,7 +160,7 @@ hopper_medium_expert_v2 = {
 }
 
 
-halfcheetah_medium_replay_v2 = halfcheetah_medium_v2 = halfcheetah_medium_expert_v2 = {
+"""halfcheetah_medium_replay_v2 = halfcheetah_medium_v2 = halfcheetah_medium_expert_v2 = {
     'diffusion': {
         'horizon': 4,
         'dim_mults': (1, 4, 8),
@@ -175,4 +175,4 @@ halfcheetah_medium_replay_v2 = halfcheetah_medium_v2 = halfcheetah_medium_expert
         'scale': 0.001,
         't_stopgrad': 4,
     },
-}
+}"""
