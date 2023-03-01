@@ -26,7 +26,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         self.max_path_length = max_path_length
         self.use_padding = use_padding
 
-        use_npy_inputs = True
+        #use_npy_inputs = True
         self.use_npy_inputs = use_npy_inputs
 
         if self.use_npy_inputs:
@@ -66,7 +66,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 fields.add_path(episode)
             fields.finalize()
 
-            #import pdb;pdb.set_trace()
+            import pdb;pdb.set_trace()
 
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
             self.indices = self.make_indices(fields.path_lengths, horizon)
