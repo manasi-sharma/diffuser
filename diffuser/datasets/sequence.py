@@ -42,7 +42,8 @@ class SequenceDataset(torch.utils.data.Dataset):
             fields['actions'] = normed_actions
             fields['language'] = language
 
-            fields['path_lengths'] = np.full(fields['observations'].shape[0], fields['observations'].shape[1]) # len number of episodes and each entry is the horizon (second element of shape)
+            path_len_each = 32
+            fields['path_lengths'] = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
             self.indices = self.make_indices(fields['path_lengths'], horizon)
             
