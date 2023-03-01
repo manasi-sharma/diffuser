@@ -26,7 +26,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         self.max_path_length = max_path_length
         self.use_padding = use_padding
 
-        #use_npy_inputs = True
+        use_npy_inputs = True
         self.use_npy_inputs = use_npy_inputs
 
         if self.use_npy_inputs:
@@ -43,7 +43,7 @@ class SequenceDataset(torch.utils.data.Dataset):
             fields['language'] = language
 
             path_len_each = 32
-            fields['path_lengths'] = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
+            path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
             self.indices = self.make_indices(fields['path_lengths'], horizon)
             
@@ -51,7 +51,8 @@ class SequenceDataset(torch.utils.data.Dataset):
             self.action_dim = fields['actions'].shape[-1] # last dim (embedding)
             self.fields = fields
             self.n_episodes = fields['observations'].shape[0] # first dim (num of episodes)
-            self.path_lengths = fields.path_lengths
+            self.path_lengths = path_lengths_
+            #fields['path_lengths'] = 
             self.normalize()
 
             print(fields)
