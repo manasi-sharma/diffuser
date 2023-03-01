@@ -35,7 +35,7 @@ class SequenceDataset(torch.utils.data.Dataset):
             normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
             normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
             language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
-            print("\n\ntime diff load: ", time.time() - t1)
+            print("\n\ntime diff load: ", (time.time() - t1)/60)
 
             fields = {}
             fields['observations'] = normed_observations
