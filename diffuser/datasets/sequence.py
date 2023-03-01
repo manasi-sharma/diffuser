@@ -44,8 +44,8 @@ class SequenceDataset(torch.utils.data.Dataset):
 
             path_len_each = 32
             path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
-            self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
-            self.indices = self.make_indices(fields['path_lengths'], horizon)
+            self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=path_lengths_)
+            self.indices = self.make_indices(path_lengths_, horizon)
             
             self.observation_dim = fields['observations'].shape[-1] # last dim (embedding)
             self.action_dim = fields['actions'].shape[-1] # last dim (embedding)
