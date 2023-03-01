@@ -118,7 +118,7 @@ class Trainer(object):
                 self.step_ema()
 
             if self.step % self.save_freq == 0:
-                import pdb;pdb.set_trace()
+                #import pdb;pdb.set_trace()
                 label = self.step // self.label_freq * self.label_freq
                 self.save(label)
 
