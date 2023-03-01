@@ -123,7 +123,6 @@ class SequenceDataset(torch.utils.data.Dataset):
 
         #observations = self.fields.normed_observations[path_ind, start:end]
         #actions = self.fields.normed_actions[path_ind, start:end]
-        import pdb;pdb.set_trace()
         observations = self.fields['normed_observations'][path_ind, start:end]
         actions = self.fields['normed_actions'][path_ind, start:end]
 
