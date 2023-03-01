@@ -53,10 +53,13 @@ def flatten(dataset, path_lengths):
     for key, xs in dataset.items():
         assert len(xs) == len(path_lengths)
         #import pdb;pdb.set_trace()
-        flattened[key] = np.concatenate([
-            x[:length]
-            for x, length in zip(xs, path_lengths)
-        ], axis=0)
+        try:
+            flattened[key] = np.concatenate([
+                x[:length]
+                for x, length in zip(xs, path_lengths)
+            ], axis=0)
+        except:
+            import pdb;pdb.set_trace()
     return flattened
 
 #-----------------------------------------------------------------------------#
