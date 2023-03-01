@@ -45,7 +45,7 @@ class SequenceDataset(torch.utils.data.Dataset):
             path_len_each = 32
             path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=path_lengths_)
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
             self.indices = self.make_indices(path_lengths_, horizon)
             
             self.observation_dim = fields['observations'].shape[-1] # last dim (embedding)
@@ -56,7 +56,7 @@ class SequenceDataset(torch.utils.data.Dataset):
             #fields['path_lengths'] = 
             self.normalize()
 
-            print(fields)
+            #print(fields)
 
         else:
             self.env = env = load_environment(env)
@@ -121,8 +121,11 @@ class SequenceDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx, eps=1e-4):
         path_ind, start, end = self.indices[idx]
 
-        observations = self.fields.normed_observations[path_ind, start:end]
-        actions = self.fields.normed_actions[path_ind, start:end]
+        #observations = self.fields.normed_observations[path_ind, start:end]
+        #actions = self.fields.normed_actions[path_ind, start:end]
+        import pdb;pdb.set_trace()
+        observations = self.fields['normed_observations'][path_ind, start:end]
+        actions = self.fields['normed_actions'][path_ind, start:end]
 
         conditions = self.get_conditions(observations)
         trajectories = np.concatenate([actions, observations], axis=-1)
