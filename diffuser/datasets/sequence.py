@@ -8,6 +8,8 @@ from .d4rl import load_environment, sequence_dataset
 from .normalization import DatasetNormalizer
 from .buffer import ReplayBuffer
 
+import time
+
 
 Batch = namedtuple('Batch', 'trajectories conditions')
 ValueBatch = namedtuple('ValueBatch', 'trajectories conditions values')
@@ -28,19 +30,30 @@ class SequenceDataset(torch.utils.data.Dataset):
 
         if self.use_npy_inputs:
             """Reading in the .npy files (saved data format)"""
+            t1= time.time()
             normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
             normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
             language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
+            print("\n\ntime diff load: ", time.time() - t1)
 
             fields = {}
             fields['observations'] = normed_observations
             fields['actions'] = normed_actions
             fields['language'] = language
+
+            fields['path_lengths'] = np.full(fields['observations'].shape[0], fields['observations'].shape[1]) # len number of episodes and each entry is the horizon (second element of shape)
+            self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
+            self.indices = self.make_indices(fields['path_lengths'], horizon)
             
-            self.observation_dim = fields['observations'].shape[-1]
-            self.action_dim = fields['actions'].shape[-1]
+            self.observation_dim = fields['observations'].shape[-1] # last dim (embedding)
+            self.action_dim = fields['actions'].shape[-1] # last dim (embedding)
             self.fields = fields
-            self.n_episodes = fields['observations'].shape[0]
+            self.n_episodes = fields['observations'].shape[0] # first dim (num of episodes)
+            self.path_lengths = fields.path_lengths
+            self.normalize()
+
+            print(fields)
+
         else:
             self.env = env = load_environment(env)
             self.env.seed(seed)
@@ -51,7 +64,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 fields.add_path(episode)
             fields.finalize()
 
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
 
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
             self.indices = self.make_indices(fields.path_lengths, horizon)
