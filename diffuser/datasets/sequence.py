@@ -44,6 +44,10 @@ class SequenceDataset(torch.utils.data.Dataset):
                 self.fields = {}
                 self.fields['normed_observations'] = normed_observations
                 self.fields['normed_actions'] = normed_actions
+
+                self.observation_dim = normed_observations.shape[-1] # last dim (embedding)
+                self.action_dim = normed_actions.shape[-1] # last dim (embedding)
+                self.n_episodes = normed_observations.shape[0]
             else:
                 """Reading in the .npy files (saved data format)"""
                 t1= time.time()
