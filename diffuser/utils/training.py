@@ -9,6 +9,8 @@ from .arrays import batch_to_device, to_np, to_device, apply_dict
 from .timer import Timer
 from .cloud import sync_logs
 
+import time
+
 def cycle(dl):
     while True:
         for data in dl:
@@ -102,6 +104,7 @@ class Trainer(object):
     def train(self, n_train_steps):
 
         timer = Timer()
+        t1 = time.time()
         for step in range(n_train_steps):
             for i in range(self.gradient_accumulate_every):
                 batch = next(self.dataloader)
@@ -133,6 +136,7 @@ class Trainer(object):
                 self.render_samples()
 
             self.step += 1
+        print("\n\n\n\nTIMEEE FOR 100 steps: ", time.time() - t1)
 
     def save(self, epoch):
         '''

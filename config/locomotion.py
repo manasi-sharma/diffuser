@@ -46,9 +46,9 @@ base = {
         'exp_name': watch(args_to_watch),
 
         ## training
-        'n_steps_per_epoch': 5, #10000,
+        'n_steps_per_epoch': 100, #10000,
         'loss_type': 'l2',
-        'n_train_steps': 5, #1e6,
+        'n_train_steps': 1000, #1e6,
         'batch_size': 32,
         'learning_rate': 2e-4,
         'gradient_accumulate_every': 2,

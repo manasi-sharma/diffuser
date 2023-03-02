@@ -52,13 +52,13 @@ class SequenceDataset(torch.utils.data.Dataset):
                 pass
             else:
                 """Reading in the .npy files (saved data format)"""
-                t1= time.time()
+                #t1= time.time()
                 normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
                 normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
                 language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
-                print("\n\ntime diff load: ", (time.time() - t1)/60)
+                #print("\n\ntime diff load: ", (time.time() - t1)/60)
 
-                import pdb;pdb.set_trace()
+                #import pdb;pdb.set_trace()
 
                 fields = {}
                 fields['observations'] = normed_observations
@@ -88,7 +88,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 fields.add_path(episode)
             fields.finalize()
 
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
 
             self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
             self.indices = self.make_indices(fields.path_lengths, horizon)
