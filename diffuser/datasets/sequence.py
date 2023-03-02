@@ -20,46 +20,57 @@ class SequenceDataset(torch.utils.data.Dataset):
     def __init__(self, env='hopper-medium-replay', horizon=64,
         normalizer='LimitsNormalizer', preprocess_fns=[], max_path_length=1000,
         max_n_episodes=10000, termination_penalty=0, use_padding=True, seed=None, 
-        use_npy_inputs=False):
+        use_npy_inputs=False, use_normed_inputs=True):
         self.preprocess_fn = get_preprocess_fn(preprocess_fns, env)
         self.horizon = horizon
         self.max_path_length = max_path_length
         self.use_padding = use_padding
 
         use_npy_inputs = True
+        use_normed_inputs = True
         self.use_npy_inputs = use_npy_inputs
+        self.use_normed_inputs = use_normed_inputs
 
         if self.use_npy_inputs:
-            """Reading in the .npy files (saved data format)"""
-            t1= time.time()
-            normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
-            normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
-            language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
-            print("\n\ntime diff load: ", (time.time() - t1)/60)
+            if use_normed_inputs:
+                normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
+                normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
+                language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
 
-            import pdb;pdb.set_trace()
+                path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
+                self.indices = self.make_indices(path_lengths_, horizon)
 
-            fields = {}
-            fields['observations'] = normed_observations
-            fields['actions'] = normed_actions
-            fields['language'] = language
+                self.fields = {}
+                self.fields['normed_observations'] = normed_observations
+                self.fields['normed_actions'] = normed_actions
+            else:
+                """Reading in the .npy files (saved data format)"""
+                t1= time.time()
+                normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
+                normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
+                language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
+                print("\n\ntime diff load: ", (time.time() - t1)/60)
 
-            path_len_each = 32
-            path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
-            self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=path_lengths_)
-            #import pdb;pdb.set_trace()
-            self.indices = self.make_indices(path_lengths_, horizon)
-            
-            self.observation_dim = fields['observations'].shape[-1] # last dim (embedding)
-            self.action_dim = fields['actions'].shape[-1] # last dim (embedding)
-            self.fields = fields
-            self.n_episodes = fields['observations'].shape[0] # first dim (num of episodes)
-            self.path_lengths = path_lengths_
-            #fields['path_lengths'] = 
-            self.normalize()
+                import pdb;pdb.set_trace()
 
-            #print(fields)
+                fields = {}
+                fields['observations'] = normed_observations
+                fields['actions'] = normed_actions
+                fields['language'] = language
 
+                path_len_each = 32
+                path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
+                self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=path_lengths_)
+                #import pdb;pdb.set_trace()
+                self.indices = self.make_indices(path_lengths_, horizon)
+                
+                self.observation_dim = fields['observations'].shape[-1] # last dim (embedding)
+                self.action_dim = fields['actions'].shape[-1] # last dim (embedding)
+                self.fields = fields
+                self.n_episodes = fields['observations'].shape[0] # first dim (num of episodes)
+                self.path_lengths = path_lengths_
+                #fields['path_lengths'] = 
+                self.normalize()
         else:
             self.env = env = load_environment(env)
             self.env.seed(seed)
@@ -123,10 +134,12 @@ class SequenceDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx, eps=1e-4):
         path_ind, start, end = self.indices[idx]
 
-        #observations = self.fields.normed_observations[path_ind, start:end]
-        #actions = self.fields.normed_actions[path_ind, start:end]
-        observations = self.fields['normed_observations'][path_ind, start:end]
-        actions = self.fields['normed_actions'][path_ind, start:end]
+        if self.use_npy_inputs:
+            observations = self.fields['normed_observations'][path_ind, start:end]
+            actions = self.fields['normed_actions'][path_ind, start:end]
+        else:
+            observations = self.fields.normed_observations[path_ind, start:end]
+            actions = self.fields.normed_actions[path_ind, start:end]
 
         conditions = self.get_conditions(observations)
         trajectories = np.concatenate([actions, observations], axis=-1)
