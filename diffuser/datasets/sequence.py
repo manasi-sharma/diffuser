@@ -40,6 +40,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 path_len_each = 32
                 path_lengths_ = np.full(normed_observations.shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
                 self.indices = self.make_indices(path_lengths_, horizon)
+                self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=path_lengths_)
 
                 self.fields = {}
                 self.fields['normed_observations'] = normed_observations
