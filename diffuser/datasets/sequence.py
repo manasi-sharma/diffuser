@@ -37,7 +37,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
                 language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
 
-                path_lengths_ = np.full(fields['observations'].shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
+                path_lengths_ = np.full(normed_observations.shape[0], path_len_each) # len number of episodes and each entry is the horizon (second element of shape)
                 self.indices = self.make_indices(path_lengths_, horizon)
 
                 self.fields = {}
