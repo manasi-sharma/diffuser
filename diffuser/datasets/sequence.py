@@ -27,13 +27,13 @@ class SequenceDataset(torch.utils.data.Dataset):
         self.use_padding = use_padding
 
         use_npy_inputs = True
-        use_normed_inputs = True
+        use_normed_inputs = False
         self.use_npy_inputs = use_npy_inputs
         self.use_normed_inputs = use_normed_inputs
 
         if self.use_npy_inputs:
             if use_normed_inputs:
-                normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
+                """normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
                 normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
                 language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
 
@@ -48,7 +48,8 @@ class SequenceDataset(torch.utils.data.Dataset):
 
                 self.observation_dim = normed_observations.shape[-1] # last dim (embedding)
                 self.action_dim = normed_actions.shape[-1] # last dim (embedding)
-                self.n_episodes = normed_observations.shape[0]
+                self.n_episodes = normed_observations.shape[0]"""
+                pass
             else:
                 """Reading in the .npy files (saved data format)"""
                 t1= time.time()
