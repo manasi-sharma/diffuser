@@ -211,7 +211,7 @@ class GaussianDiffusion(nn.Module):
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
         x_noisy = apply_conditioning(x_noisy, cond, self.action_dim)
 
-        if language:
+        if language is not None:
             x_recon = self.model(x_noisy, cond, t, language)
         else:
             x_recon = self.model(x_noisy, cond, t)
