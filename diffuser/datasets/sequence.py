@@ -11,7 +11,7 @@ from .buffer import ReplayBuffer
 import time
 
 
-RewardBatch = namedtuple('Batch', 'trajectories conditions returns')
+RewardBatch = namedtuple('Batch', 'trajectories conditions language')
 Batch = namedtuple('Batch', 'trajectories conditions')
 ValueBatch = namedtuple('ValueBatch', 'trajectories conditions values')
 
@@ -159,7 +159,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         if self.use_language:
             #import pdb;pdb.set_trace()
             language = self.fields['language'][path_ind, 0]
-            batch = RewardBatch(trajectories, conditions, self.fields['language'])
+            batch = RewardBatch(trajectories, conditions, language)
         else:
             batch = Batch(trajectories, conditions)
         return batch
