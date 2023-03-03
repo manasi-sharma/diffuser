@@ -121,7 +121,7 @@ class TemporalUnet(nn.Module):
 
         t = self.time_mlp(time)
 
-        if language:
+        if language is not None:
             import pdb;pdb.set_trace()
             #t = torch.cat([t, returns_embed], dim=-1)
             t = attn_output.squeeze(0).to(torch.device('cuda:0'))
