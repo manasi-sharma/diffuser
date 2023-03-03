@@ -112,7 +112,7 @@ class TemporalUnet(nn.Module):
             nn.Conv1d(dim, transition_dim, 1),
         )
 
-    def forward(self, x, cond, time):
+    def forward(self, x, cond, time, language=None):
         '''
             x : [ batch x horizon x transition ]
         '''
@@ -120,6 +120,12 @@ class TemporalUnet(nn.Module):
         x = einops.rearrange(x, 'b h t -> b t h')
 
         t = self.time_mlp(time)
+
+        if language:
+            import pdb;pdb.set_trace()
+            #t = torch.cat([t, returns_embed], dim=-1)
+            t = attn_output.squeeze(0).to(torch.device('cuda:0'))
+
         h = []
 
         for resnet, resnet2, attn, downsample in self.downs:
