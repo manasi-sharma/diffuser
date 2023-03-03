@@ -226,7 +226,7 @@ class GaussianDiffusion(nn.Module):
 
         return loss, info
 
-    def loss(self, x, cond, language=None) #(self, x, *args):
+    def loss(self, x, cond, language=None): #(self, x, *args):
         batch_size = len(x)
         t = torch.randint(0, self.n_timesteps, (batch_size,), device=x.device).long()
         #return self.p_losses(x, *args, t)
