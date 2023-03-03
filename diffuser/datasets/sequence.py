@@ -27,7 +27,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         self.max_path_length = max_path_length
         self.use_padding = use_padding
 
-        use_npy_inputs = False #True
+        use_npy_inputs = True
         use_normed_inputs = False
         self.use_npy_inputs = use_npy_inputs
         self.use_normed_inputs = use_normed_inputs
