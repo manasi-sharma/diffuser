@@ -79,6 +79,9 @@ class SequenceDataset(torch.utils.data.Dataset):
                 #fields['path_lengths'] = 
                 self.normalize()
         else:
+            max_path_length = 1000
+            horizon = 4
+
             self.env = env = load_environment(env)
             self.env.seed(seed)
             itr = sequence_dataset(env, self.preprocess_fn)
