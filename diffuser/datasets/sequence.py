@@ -31,6 +31,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         use_normed_inputs = False
         self.use_npy_inputs = use_npy_inputs
         self.use_normed_inputs = use_normed_inputs
+        self.use_language = use_language
 
         if self.use_npy_inputs:
             if use_normed_inputs:
