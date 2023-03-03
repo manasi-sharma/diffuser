@@ -106,6 +106,7 @@ utils.report_parameters(model)
 
 print('Testing forward...', end=' ', flush=True)
 batch = utils.batchify(dataset[0])
+import pdb;pdb.set_trace()
 loss, _ = diffusion.loss(*batch)
 loss.backward()
 print('✓')
