@@ -11,6 +11,7 @@ from .buffer import ReplayBuffer
 import time
 
 
+RewardBatch = namedtuple('Batch', 'trajectories conditions returns')
 Batch = namedtuple('Batch', 'trajectories conditions')
 ValueBatch = namedtuple('ValueBatch', 'trajectories conditions values')
 
@@ -20,7 +21,7 @@ class SequenceDataset(torch.utils.data.Dataset):
     def __init__(self, env='hopper-medium-replay', horizon=64,
         normalizer='LimitsNormalizer', preprocess_fns=[], max_path_length=1000,
         max_n_episodes=10000, termination_penalty=0, use_padding=True, seed=None, 
-        use_npy_inputs=False, use_normed_inputs=True):
+        use_npy_inputs=False, use_normed_inputs=True, use_language=True):
         self.preprocess_fn = get_preprocess_fn(preprocess_fns, env)
         self.horizon = horizon
         self.max_path_length = max_path_length
@@ -153,7 +154,13 @@ class SequenceDataset(torch.utils.data.Dataset):
 
         conditions = self.get_conditions(observations)
         trajectories = np.concatenate([actions, observations], axis=-1)
-        batch = Batch(trajectories, conditions)
+
+        import pdb;pdb.set_trace()
+
+        if self.use_language:
+            batch = RewardBatch(trajectories, conditions, self.fields['language'])
+        else:
+            batch = Batch(trajectories, conditions)
         return batch
 
 
