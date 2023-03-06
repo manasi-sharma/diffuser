@@ -108,6 +108,7 @@ class Trainer(object):
         for step in range(n_train_steps):
             for i in range(self.gradient_accumulate_every):
                 batch = next(self.dataloader)
+                import pdb;pdb.set_trace()
                 batch = batch_to_device(batch)
 
                 loss, infos = self.model.loss(*batch)
