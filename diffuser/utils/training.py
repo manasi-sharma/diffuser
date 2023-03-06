@@ -136,7 +136,7 @@ class Trainer(object):
                 self.render_samples()
 
             self.step += 1
-        print("\n\n\n\nTIMEEE FOR 1000 steps and 100 steps p epoch: ", time.time() - t1)
+        print("\n\n\n\nTIMEEE FOR 1000 steps and 100 steps p epoch (min): ", (time.time() - t1)/60)
 
     def save(self, epoch):
         '''
