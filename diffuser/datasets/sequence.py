@@ -60,8 +60,6 @@ class SequenceDataset(torch.utils.data.Dataset):
                 language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
                 #print("\n\ntime diff load: ", (time.time() - t1)/60)
 
-                import pdb;pdb.set_trace()
-
                 fields = {}
                 fields['observations'] = observations
                 fields['actions'] = actions
