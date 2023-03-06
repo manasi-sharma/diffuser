@@ -159,13 +159,9 @@ class SequenceDataset(torch.utils.data.Dataset):
         if self.use_language:
             #import pdb;pdb.set_trace()
             language = self.fields['language'][path_ind, 0]
-            import pdb;pdb.set_trace()
             batch = RewardBatch(trajectories, conditions, language)
-            import pdb;pdb.set_trace()
         else:
-            import pdb;pdb.set_trace()
             batch = Batch(trajectories, conditions)
-            import pdb;pdb.set_trace()
         return batch
 
 
