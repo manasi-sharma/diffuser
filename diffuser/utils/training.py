@@ -72,6 +72,7 @@ class Trainer(object):
         self.gradient_accumulate_every = gradient_accumulate_every
 
         self.dataset = dataset
+        import pdb;pdb.set_trace()
         self.dataloader = cycle(torch.utils.data.DataLoader(
             self.dataset, batch_size=train_batch_size, num_workers=2, shuffle=True, pin_memory=True
         ))
