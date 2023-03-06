@@ -66,6 +66,8 @@ class TemporalUnet(nn.Module):
         print(f'[ models/temporal ] Channel dimensions: {in_out}')
 
         time_dim = dim
+        self.language_dim = language_dim
+
         self.time_mlp = nn.Sequential(
             SinusoidalPosEmb(dim),
             nn.Linear(dim, dim * 4),
@@ -82,9 +84,9 @@ class TemporalUnet(nn.Module):
                 nn.Mish(),
                 nn.Linear(dim * 4, dim),
             )
-            embed_dim = time_dim+language_dim
+            embed_dim = time_dim + dim
         else:
-            embed_dim=time_dim
+            embed_dim = time_dim
 
         self.downs = nn.ModuleList([])
         self.ups = nn.ModuleList([])
@@ -152,9 +154,9 @@ class TemporalUnet(nn.Module):
 
         t = self.time_mlp(time)
 
-        if language is not None:
+        if self.use_language is True:
             #import pdb;pdb.set_trace()
-            #language_embed_mlp = self.returns_mlp(language)
+            language_embed_mlp = self.returns_mlp(language)
             #t = torch.cat([t, language_embed_mlp], dim=-1)
             t = torch.cat([t, language], dim=-1)
             #t = attn_output.squeeze(0).to(torch.device('cuda:0'))
