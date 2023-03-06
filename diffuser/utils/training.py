@@ -107,9 +107,7 @@ class Trainer(object):
         t1 = time.time()
         for step in range(n_train_steps):
             for i in range(self.gradient_accumulate_every):
-                import pdb;pdb.set_trace()
                 batch = next(self.dataloader)
-                import pdb;pdb.set_trace()
                 batch = batch_to_device(batch)
 
                 loss, infos = self.model.loss(*batch)
@@ -138,7 +136,7 @@ class Trainer(object):
                 self.render_samples()
 
             self.step += 1
-        print("\n\n\n\nTIMEEE FOR 100 steps: ", time.time() - t1)
+        print("\n\n\n\nTIMEEE FOR 1000 steps and 100 steps p epoch: ", time.time() - t1)
 
     def save(self, epoch):
         '''
