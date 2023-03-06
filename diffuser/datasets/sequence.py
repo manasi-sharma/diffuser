@@ -55,16 +55,16 @@ class SequenceDataset(torch.utils.data.Dataset):
             else:
                 """Reading in the .npy files (saved data format)"""
                 #t1= time.time()
-                normed_observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_observations.npy')
-                normed_actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/normed_actions.npy')
+                observations = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/observations.npy')
+                actions = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/actions.npy')
                 language = np.load('/iliad/u/manasis/language-diffuser/code/dataset_npy_files/language.npy')
                 #print("\n\ntime diff load: ", (time.time() - t1)/60)
 
-                #import pdb;pdb.set_trace()
+                import pdb;pdb.set_trace()
 
                 fields = {}
-                fields['observations'] = normed_observations
-                fields['actions'] = normed_actions
+                fields['observations'] = observations
+                fields['actions'] = actions
                 fields['language'] = language
 
                 path_len_each = 32
@@ -159,9 +159,13 @@ class SequenceDataset(torch.utils.data.Dataset):
         if self.use_language:
             #import pdb;pdb.set_trace()
             language = self.fields['language'][path_ind, 0]
+            import pdb;pdb.set_trace()
             batch = RewardBatch(trajectories, conditions, language)
+            import pdb;pdb.set_trace()
         else:
+            import pdb;pdb.set_trace()
             batch = Batch(trajectories, conditions)
+            import pdb;pdb.set_trace()
         return batch
 
 
