@@ -230,8 +230,6 @@ class GaussianDiffusion(nn.Module):
         batch_size = len(x)
         t = torch.randint(0, self.n_timesteps, (batch_size,), device=x.device).long()
         #return self.p_losses(x, *args, t)
-        if language is None:
-            import pdb;pdb.set_trace()
         return self.p_losses(x, cond, t, language)
 
     def forward(self, cond, *args, **kwargs):

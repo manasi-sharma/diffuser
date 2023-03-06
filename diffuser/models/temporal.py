@@ -155,7 +155,9 @@ class TemporalUnet(nn.Module):
         t = self.time_mlp(time)
 
         if self.use_language is True:
-            #import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()            
+            if language is None:
+                import pdb;pdb.set_trace()
             language_embed_mlp = self.returns_mlp(language)
             #t = torch.cat([t, language_embed_mlp], dim=-1)
             t = torch.cat([t, language_embed_mlp], dim=-1)
