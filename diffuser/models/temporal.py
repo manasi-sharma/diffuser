@@ -75,14 +75,14 @@ class TemporalUnet(nn.Module):
 
         self.use_language=use_language
         if self.use_language:
-            self.returns_mlp = nn.Sequential(
+            """self.returns_mlp = nn.Sequential(
                 nn.Linear(language_dim, dim),
                 nn.Mish(),
                 nn.Linear(dim, dim * 4),
                 nn.Mish(),
                 nn.Linear(dim * 4, dim),
-            )
-            embed_dim = 2*dim
+            )"""
+            embed_dim = time_dim+language_dim
         else:
             embed_dim=time_dim
 
@@ -139,8 +139,9 @@ class TemporalUnet(nn.Module):
 
         if language is not None:
             #import pdb;pdb.set_trace()
-            language_embed_mlp = self.returns_mlp(language)
-            t = torch.cat([t, language_embed_mlp], dim=-1)
+            #language_embed_mlp = self.returns_mlp(language)
+            #t = torch.cat([t, language_embed_mlp], dim=-1)
+            t = torch.cat([t, language], dim=-1)
             #t = attn_output.squeeze(0).to(torch.device('cuda:0'))
 
         h = []
