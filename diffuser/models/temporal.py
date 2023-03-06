@@ -73,18 +73,18 @@ class TemporalUnet(nn.Module):
             nn.Linear(dim * 4, dim),
         )
 
-        """self.use_language=use_language
+        self.use_language=use_language
         if self.use_language:
-            # self.returns_mlp = nn.Sequential(
-            #     nn.Linear(language_dim, dim),
-            #     nn.Mish(),
-            #     nn.Linear(dim, dim * 4),
-            #     nn.Mish(),
-            #     nn.Linear(dim * 4, dim),
-            # )
+            self.returns_mlp = nn.Sequential(
+                nn.Linear(language_dim, dim),
+                nn.Mish(),
+                nn.Linear(dim, dim * 4),
+                nn.Mish(),
+                nn.Linear(dim * 4, dim),
+            )
             embed_dim = time_dim+language_dim
         else:
-            embed_dim=time_dim"""
+            embed_dim=time_dim
 
         self.downs = nn.ModuleList([])
         self.ups = nn.ModuleList([])
@@ -94,45 +94,45 @@ class TemporalUnet(nn.Module):
         for ind, (dim_in, dim_out) in enumerate(in_out):
             is_last = ind >= (num_resolutions - 1)
 
-            """self.downs.append(nn.ModuleList([
+            self.downs.append(nn.ModuleList([
                 ResidualTemporalBlock(dim_in, dim_out, embed_dim=embed_dim, horizon=horizon),
                 ResidualTemporalBlock(dim_out, dim_out, embed_dim=embed_dim, horizon=horizon),
                 Residual(PreNorm(dim_out, LinearAttention(dim_out))) if attention else nn.Identity(),
                 Downsample1d(dim_out) if not is_last else nn.Identity()
-            ]))"""
-            self.downs.append(nn.ModuleList([
+            ]))
+            """self.downs.append(nn.ModuleList([
                 ResidualTemporalBlock(dim_in, dim_out, embed_dim=time_dim, horizon=horizon),
                 ResidualTemporalBlock(dim_out, dim_out, embed_dim=time_dim, horizon=horizon),
                 Residual(PreNorm(dim_out, LinearAttention(dim_out))) if attention else nn.Identity(),
                 Downsample1d(dim_out) if not is_last else nn.Identity()
-            ]))
+            ]))"""
 
             if not is_last:
                 horizon = horizon // 2
 
         mid_dim = dims[-1]
-        """self.mid_block1 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=embed_dim, horizon=horizon)
+        self.mid_block1 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=embed_dim, horizon=horizon)
         self.mid_attn = Residual(PreNorm(mid_dim, LinearAttention(mid_dim))) if attention else nn.Identity()
-        self.mid_block2 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=embed_dim, horizon=horizon)"""
-        self.mid_block1 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=time_dim, horizon=horizon)
+        self.mid_block2 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=embed_dim, horizon=horizon)
+        """self.mid_block1 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=time_dim, horizon=horizon)
         self.mid_attn = Residual(PreNorm(mid_dim, LinearAttention(mid_dim))) if attention else nn.Identity()
-        self.mid_block2 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=time_dim, horizon=horizon)
+        self.mid_block2 = ResidualTemporalBlock(mid_dim, mid_dim, embed_dim=time_dim, horizon=horizon)"""
 
         for ind, (dim_in, dim_out) in enumerate(reversed(in_out[1:])):
             is_last = ind >= (num_resolutions - 1)
 
-            """self.ups.append(nn.ModuleList([
+            self.ups.append(nn.ModuleList([
                 ResidualTemporalBlock(dim_out * 2, dim_in, embed_dim=embed_dim, horizon=horizon),
                 ResidualTemporalBlock(dim_in, dim_in, embed_dim=embed_dim, horizon=horizon),
                 Residual(PreNorm(dim_in, LinearAttention(dim_in))) if attention else nn.Identity(),
                 Upsample1d(dim_in) if not is_last else nn.Identity()
-            ]))"""
-            self.ups.append(nn.ModuleList([
+            ]))
+            """self.ups.append(nn.ModuleList([
                 ResidualTemporalBlock(dim_out * 2, dim_in, embed_dim=time_dim, horizon=horizon),
                 ResidualTemporalBlock(dim_in, dim_in, embed_dim=time_dim, horizon=horizon),
                 Residual(PreNorm(dim_in, LinearAttention(dim_in))) if attention else nn.Identity(),
                 Upsample1d(dim_in) if not is_last else nn.Identity()
-            ]))
+            ]))"""
 
             if not is_last:
                 horizon = horizon * 2
@@ -152,12 +152,12 @@ class TemporalUnet(nn.Module):
 
         t = self.time_mlp(time)
 
-        """if language is not None:
+        if language is not None:
             #import pdb;pdb.set_trace()
             #language_embed_mlp = self.returns_mlp(language)
             #t = torch.cat([t, language_embed_mlp], dim=-1)
             t = torch.cat([t, language], dim=-1)
-            #t = attn_output.squeeze(0).to(torch.device('cuda:0'))"""
+            #t = attn_output.squeeze(0).to(torch.device('cuda:0'))
 
         h = []
 
